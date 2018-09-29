@@ -1,4 +1,4 @@
-# mulxd
+# MULXD
 
 ## What is it?
 Multi User LXD (MULXD) is a program that when executed drops a user to a personal LXD container (or creates one).
