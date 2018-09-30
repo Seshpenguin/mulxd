@@ -22,9 +22,11 @@ shell=${1:-"/bin/bash"} # Shell to use in the container
 
 # Get the username (which is also container name)
 user=$(whoami)
+# Get the install directory
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 # Print the MOTD
-cat motd.txt
+cat $DIR/motd.txt
 
 # Check if user is using the admin command or not
 if [[ $1 == "admin" ]]
@@ -32,10 +34,10 @@ then
     echo "Admin Commands coming soon"
 else
     # check if user is exempt from connecting to a container
-    if grep -Fxq "$user" exempt.txt
+    if grep -Fxq "$user" $DIR/exempt.txt
     then
         echo "Connecting to host instead, $user is exempt"
-        sh
+        bash
     else
         # Check if the user has a container already
         if lxc list -c n --format csv | grep -Fxq "$user"
