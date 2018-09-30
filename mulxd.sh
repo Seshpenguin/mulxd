@@ -25,8 +25,7 @@ user=$(whoami)
 # Get the install directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-# Print the MOTD
-cat $DIR/motd.txt
+
 
 # Check if user is using the admin command or not
 if [[ $1 == "admin" ]]
@@ -55,9 +54,12 @@ else
     # check if user is exempt from connecting to a container
     if grep -Fxq "$user" $DIR/exempt.txt
     then
-        echo "Connecting to host instead, $user is exempt"
+        echo "MULXD: Connecting to host instead, $user is exempt"
         bash
     else
+        # Print the MOTD
+        cat $DIR/motd.txt
+
         # Check if the user has a container already
         if lxc list -c n --format csv | grep -Fxq "$user"
         then
@@ -73,8 +75,6 @@ else
         fi
     fi
 fi
-
-
 
 echo "Exited... Goodbye!"
 

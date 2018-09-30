@@ -17,6 +17,12 @@
 
 # Installs MULXD into a directory (set with argument or defaults to /opt/mulxd)
 echo "Installing Multi User LXD..."
+
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root" 
+    exit 1
+fi
+
 install_dir=${1:-"/opt/mulxd"}
 
 mkdir -p $install_dir
