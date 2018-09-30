@@ -30,3 +30,6 @@ For example, to add a user:
 Use MULXD at your own risk. I designed it without much regard for security, since the users for my use case are trusted.
 
 If you know how to make MULXD more secure, or found a security vulnerability, feel free to create a pull request or open an issue.
+
+## Other notes
+If you are running a system with low memory, you may be interested in Kernel Samepage Merging, and "ksm-wrapper". This allows duplicated regions of memory (for example, multiple containers) to be deduplicated (merged together), thus reducing the overall memory usage.
