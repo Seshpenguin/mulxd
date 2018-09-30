@@ -31,7 +31,26 @@ cat $DIR/motd.txt
 # Check if user is using the admin command or not
 if [[ $1 == "admin" ]]
 then
-    echo "Admin Commands coming soon"
+    echo "-- MULXD Admin Commands --" # make sure the user is root
+    if [[ $EUID -ne 0 ]]; then
+        echo "This script must be run as root" 
+        exit 1
+    fi
+    case "$2" in
+        "adduser")  echo "Adding user $3"
+            adduser $3
+            usermod -aG lxd $3 # add user to the LXD Group
+            echo "Done adding user!"
+            ;;
+        "deluser")  echo  "Deleting user $3"
+            lxc stop $3
+            lxc delete $3
+            deluser --remove-home $3
+            echo "Done deleting user!"
+            ;;
+        *) echo "Unknown command: $2"
+            ;;
+    esac
 else
     # check if user is exempt from connecting to a container
     if grep -Fxq "$user" $DIR/exempt.txt
@@ -47,7 +66,7 @@ else
         else
             # Create a container for the user (name is the unix username)
             echo "This is your first time connecting, please wait..."
-            lxc launch $image -p $profile $user # Change this line to customize the user's container
+            lxc launch $image -p $profile $user
             echo "Done!"
             # Connect user to new container.
             lxc exec $user -- $shell
@@ -57,5 +76,5 @@ fi
 
 
 
-echo "Exited Container... Goodbye!"
+echo "Exited... Goodbye!"
 
