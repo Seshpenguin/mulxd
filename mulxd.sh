@@ -16,9 +16,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # -- Settings --
-image="ubuntu:18.04" # LXD Image
-profile="default" # LXD Profile
-shell="/bin/bash" # Shell to use in the container
+image=${1:-"ubuntu:18.04"} # LXD Image
+profile=${1:-"default"} # LXD Profile
+shell=${1:-"/bin/bash"} # Shell to use in the container
 
 # Get the username (which is also container name)
 user=$(whoami)
