@@ -65,7 +65,9 @@ else
         if lxc list -c n --format csv | grep -Fxq "$user"
         then
             # Connect user to their container.
+            lxc start $user
             lxc exec $user -- sudo --user $shell --login
+            lxc stop $user
         else
             # Create a container for the user (name is the unix username)
             echo "This is your first time connecting, please wait..."
@@ -77,9 +79,12 @@ else
             echo "Done!"
             # Connect user to new container.
             lxc exec $user -- sudo --user $shell --login
+
+            lxc stop $user
         fi
     fi
 fi
+
 
 echo "Exited... Goodbye!"
 
