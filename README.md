@@ -10,7 +10,7 @@ MULXD is free software, GNU GPLv3 licensed.
 ## How do I use it?
 If you want to have SSH users automatically use it, simply add a call to the "mulxd.sh" file in their "~/.bashrc" file. MULXD will be run when they connect, and create a container if the user doesn't have one already. Container names are the user's username.
 
-The program accepts 3 arguments, the LXD image (default: "ubuntu:18.04"), the LXD Profile (default: "default"), and the shell to be used in the container (default: "/bin/bash"). 
+The program accepts 3 arguments, the LXD image (default: "ubuntu:18.04"), the LXD Profile (default: "default"), and the user to be logged into in the container (default: "ubuntu"). 
 
 There is also a supplied "install.sh" file which will copy the required files into a directory (default: "/opt/mulxd", can be changed with an argument). The installer can also add a call to MULXD in the default ".bashrc" for new users.
 
@@ -33,3 +33,5 @@ If you know how to make MULXD more secure, or found a security vulnerability, fe
 
 ## Other notes
 If you are running a system with low memory, you may be interested in Kernel Samepage Merging, and "ksm-wrapper". This allows duplicated regions of memory (for example, multiple containers) to be deduplicated (merged together), thus reducing the overall memory usage.
+
+Running X11 apps requires some addition configuration, tutorial coming soon.

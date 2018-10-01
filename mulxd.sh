@@ -18,14 +18,15 @@
 # -- Settings --
 image=${1:-"ubuntu:18.04"} # LXD Image
 profile=${1:-"default"} # LXD Profile
-shell=${1:-"/bin/bash"} # Shell to use in the container
+shell=${1:-"ubuntu"} # User to logon in the container.
 
 # Get the username (which is also container name)
 user=$(whoami)
 # Get the install directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-
+# Load the config file
+source $DIR/mulxd.cfg
 
 # Check if user is using the admin command or not
 if [[ $1 == "admin" ]]
@@ -64,14 +65,18 @@ else
         if lxc list -c n --format csv | grep -Fxq "$user"
         then
             # Connect user to their container.
-            lxc exec $user -- $shell
+            lxc exec $user -- sudo --user $shell --login
         else
             # Create a container for the user (name is the unix username)
             echo "This is your first time connecting, please wait..."
-            lxc launch $image -p $profile $user
+            if [ "$use_x11" = true ] ; then
+                lxc launch $image -p $profile --profile gui $user
+            else
+                lxc launch $image -p $profile $user
+            fi
             echo "Done!"
             # Connect user to new container.
-            lxc exec $user -- $shell
+            lxc exec $user -- sudo --user $shell --login
         fi
     fi
 fi

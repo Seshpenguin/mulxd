@@ -23,12 +23,34 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-install_dir=${1:-"/opt/mulxd"}
+# Load the config file
+source mulxd.cfg
 
+read -p "Do you want to enable support for X11 (y/N)? " -n 1 -r
+echo    
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    if [ "$use_x11" = true ] ; then
+        echo 'Enabling X11 Support...'
+        # Commands from: https://blog.simos.info/how-to-easily-run-graphics-accelerated-gui-apps-in-lxd-containers-on-your-ubuntu-desktop/
+        echo "root:$UID:1" | sudo tee -a /etc/subuid /etc/subgid
+        lxc profile create gui # create a profile to enable X11
+        cat lxdguiprofile.txt | lxc profile edit gui
+        lxc profile list # verify profile is there
+        lxc profile show gui
+    else
+        echo "Error: Please enable use_x11 in mulxd.cfg first."
+    fi
+fi
+
+install_dir=${1:-"/opt/mulxd"}
+echo "Copying files..."
+# Copy the files
 mkdir -p $install_dir
 cp ./mulxd.sh $install_dir/mulxd.sh
 cp ./motd.txt $install_dir/motd.txt
 cp ./exempt.txt $install_dir/exempt.txt
+cp ./mulxd.cfg $install_dir/mulxd.cfg
 
 echo "Done copying files."
 read -p "Do you want to add MULXD to the default bashrc for new users (y/N)? " -n 1 -r
