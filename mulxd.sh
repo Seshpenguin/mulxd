@@ -80,6 +80,7 @@ else
             fi
             echo "Done!"
             # Connect user to new container.
+            lxc exec $user -- bash -c "exit" # Fix a bug with sudo not working on new containers
             lxc exec $user -- sudo --user $shell --login
 
             lxc stop $user
