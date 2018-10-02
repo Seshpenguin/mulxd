@@ -72,9 +72,11 @@ else
             # Create a container for the user (name is the unix username)
             echo "This is your first time connecting, please wait..."
             if [ "$use_x11" = true ] ; then
-                lxc launch $image -p $profile --profile gui $user
+                lxc launch $image -p $profile $user
+                lxc config set $user boot.autostart false
             else
                 lxc launch $image -p $profile $user
+                lxc config set $user boot.autostart false
             fi
             echo "Done!"
             # Connect user to new container.
